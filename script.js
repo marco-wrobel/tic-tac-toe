@@ -1,12 +1,31 @@
 function playerWon() {
     if (gameState[0] != "" && gameState[0] === gameState[1] && gameState[1] === gameState[2])
         return gameState[0]
-
     if (gameState[3] != "" && gameState[3] === gameState[4] && gameState[4] === gameState[5])
         return gameState[3]
-
     if (gameState[6] != "" && gameState[6] === gameState[7] && gameState[7] === gameState[8])
         return gameState[6]
+    if (gameState[0] != "" && gameState[0] === gameState[3] && gameState[3] === gameState[6])
+        return gameState[0]
+    if (gameState[1] != "" && gameState[1] === gameState[4] && gameState[4] === gameState[7])
+        return gameState[1]
+    if (gameState[2] != "" && gameState[2] === gameState[5] && gameState[5] === gameState[8])
+        return gameState[2]
+    if (gameState[0] != "" && gameState[0] === gameState[4] && gameState[4] === gameState[8])
+        return gameState[0]
+    if (gameState[2] != "" && gameState[2] === gameState[4] && gameState[4] === gameState[6])
+        return gameState[2]
+}
+function draw() {
+    for (let i = 0; i < 9; i++) {
+        if (
+            gameState[i] === ""
+        )
+            return false
+
+    }
+
+    return true
 }
 /*
 We store our game status element here to allow us to more easily 
@@ -36,8 +55,6 @@ Since we have some dynamic factors in those messages, namely the current player,
 we have declared them as functions, so that the actual message gets created with 
 current data every time we need it.
 */
-const winningMessage = () => `Player ${currentPlayer} has won!`;
-const drawMessage = () => `Game ended in a draw!`;
 const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
 /*
 We set the inital message to let the players know whose turn it is
@@ -60,36 +77,40 @@ function handleCellClick(evt) {
             cell.innerHTML = 'X'
             currentPlayer = "O"
             gameState[cellindex] = "X"
+            statusDisplay.innerHTML = currentPlayerTurn()
         } else if (currentPlayer === "O") {
             cell.innerHTML = 'O'
             currentPlayer = "X"
             gameState[cellindex] = "O"
+            statusDisplay.innerHTML = currentPlayerTurn()
         }
         const player = playerWon()
         if (player != undefined) {
             window.alert("player " + player + " has won")
-            for (let i = 0; i < 9; i++) {
-                cells[i].innerHTML = ''
-                gameState = ["", "", "", "", "", "", "", "", ""];
+            reset();
+        }
 
-
-            }
+        if (draw()) {
+            window.alert("no one won, its a draw");
+            reset();
         }
     }
     else {
         window.alert("feldBelegt")
     }
 }
-
 const cells = document.querySelectorAll('.cell');
 
 function handleRestartGame() {
-    for (let i = 0; i < 9; i++) {
-        cells[i].innerHTML = ''
-        gameState = ["", "", "", "", "", "", "", "", ""];
-    }
-
+    reset();
     window.alert("restart game")
+}
+
+function reset() {
+    for (let i = 0; i < 9; i++)
+        cells[i].innerHTML = '';
+
+    gameState = ["", "", "", "", "", "", "", "", ""];
 }
 /*
 And finally we add our event listeners to the actual game cells, as well as our 
@@ -97,4 +118,3 @@ restart button
 */
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
-
