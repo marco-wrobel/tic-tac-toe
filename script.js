@@ -1,8 +1,12 @@
 function playerWon() {
     if (gameState[0] != "" && gameState[0] === gameState[1] && gameState[1] === gameState[2])
         return gameState[0]
+
     if (gameState[3] != "" && gameState[3] === gameState[4] && gameState[4] === gameState[5])
         return gameState[3]
+
+    if (gameState[6] != "" && gameState[6] === gameState[7] && gameState[7] === gameState[8])
+        return gameState[6]
 }
 /*
 We store our game status element here to allow us to more easily 
